@@ -7,7 +7,6 @@ app = Flask(__name__)
 def inject_now():
     return {
         'now': datetime.utcnow(),
-        'ave': "<span style='color:#CC0000'>A</span><span style='color:#4d9906'>V</span><span style='color:#32619e'>E</span>",
         }
 
 @app.route('/')
