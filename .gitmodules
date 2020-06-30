@@ -1,0 +1,3 @@
+[submodule "static/docs"]
+	path = static/docs
+	url = https://github.com/AVEgame/AVE-docs
