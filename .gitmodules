@@ -1,0 +1,3 @@
+[submodule "AVE-docs"]
+	path = AVE-docs
+	url = https://github.com/AVEgame/AVE-docs
