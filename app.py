@@ -1,12 +1,18 @@
-from flask import Flask, render_template
 from datetime import datetime
-import markdown
 import re
+
+from flask import Flask, render_template
+import markdown
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
+
+@app.errorhandler(HTTPException)
+def error(e):
+    return render_template("error.html", code=e.code)
 
 @app.context_processor
 def inject():
@@ -27,3 +33,10 @@ def docs(filename):
     html = re.sub(r"\%\%([^\%]*)\%\%", r'<span style="color:#4d9906"><<i>\1</i>></span>', html)
     return render_template("docs.html", content=html)
 
+@app.route('/team')
+def team():
+    return render_template('team.html')
+
+@app.route('/make')
+def make():
+    return render_template('make.html')
