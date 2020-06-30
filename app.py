@@ -40,3 +40,7 @@ def team():
 @app.route('/make')
 def make():
     return render_template('make.html')
+
+@app.route('/git')
+def git():
+    return render_template('git.html')
