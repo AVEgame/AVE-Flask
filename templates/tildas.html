@@ -1,0 +1,4 @@
+{% set colors = ["color:#cc0000", "color:#4d9906", "color:#32619e"] %}
+{% for i in range(3) %}
+    <span style="{{ colors[i] }}"{% if title and til % 3 != i %} class="optional"{% endif %}>~</span>
+{% endfor %}

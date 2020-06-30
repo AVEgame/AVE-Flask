@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>AVE: Adventure! Villainy! Excitement!</title>
+        <link rel='stylesheet' href={{ url_for('static', filename='sty.css') }}>
+        <link rel='stylesheet' href={{ url_for('static', filename='ave/sty.css') }}>
+        <script type='text/javascript' src={{ url_for('static', filename='konami.js') }}></script>
+    </head>
+    <body>
+        <div class='top'>
+            <a href='/'><img src={{ url_for('static', filename='top.png') }}></a>
+            <div class='version'>v{{ version }}</div>
+        </div>
+        <div class='sidebar'>
+            {% with title=True %}
+                <a href='/'>home</a>
+                <a href='/play'>play</a>
+                <a href='/make'>write</a>
+                <a href='/library'>library</a>
+                {% with til = 0 %}
+                    {% include 'tildas.html' %}
+                {% endwith %}
+                <a href='/docs/versions.md'>versions</a>
+                <a href='/docs/index.md'>docs</a>
+                <a href='/git'>GitHub</a>
+                {% with til = 1 %}
+                    {% include 'tildas.html' %}
+                {% endwith %}
+                <a href='/team'>team</a>
+            {% endwith %}
+        </div>
+        <div class='maintext'>
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class='foot' id='foot'>&copy; M. Scroggs & G. Grasso 2016-{{ now.year }}. If you find an error on this website, please submit a bug report <a href='https://github.com/AVEgame/AVE-website/issues' target='new'>here</a>.</div>
+        <script type='text/javascript'>
+            l = document.links;
+            
+            col = 0
+            cols = Array("red","green","blue")
+            for(var i=1; i<l.length-1; i++) {
+                if(l[i].className!="invisible"){
+                    l[i].className = cols[col%3];
+                    col++
+                }
+            }
+        </script>
+    </body>
+</html>
