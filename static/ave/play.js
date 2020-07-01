@@ -7,30 +7,22 @@ function gameList() {
 }
 
 function loadRoom(info) {
-    document.getElementById('roominfo').innerHTML = info.roominfo;
+    document.getElementById('roominfo').innerHTML = info.room_desc;
     var inventory = "INVENTORY";
-    info.inventory.forEach( item => inventory += `</br>${item}`);
+    info.inventory_text.forEach( item => inventory += `</br>${item}`);
     document.getElementById('inventory').innerHTML = inventory;
     menu = document.getElementById('menu');
     menu.innerHTML = "";
     for (var i = 0; i < info.options.length; i++) {
         div = document.createElement('div');
-        div.innerHTML = info.options[i].desc;
+        div.innerHTML = info.options[i][1];
         div.classList.add("menuitem");
+        div.setAttribute("data-key", info.options[i][0])
         div.onclick = function() {
-
-        }
-    }
-    info.options.forEach( function(option) {
-        div = document.createElement('div');
-        div.innerHTML = option.desc;
-        div.classList.add("menuitem");
-        div.onclick = function() {
-            menuHandler(this)
+            menuHandler(this);
         }
         menu.appendChild(div);
     }
-    )
 }
 
 function resetScreen() {
@@ -40,18 +32,18 @@ function resetScreen() {
 }
 
 function menuHandler(e) {
-    i = Array.from(e.parentNode.children).indexOf(e);
     resetScreen();
-    getNextRoom(current_room, i);
+    getNextRoom(e.getAttribute("data-key"));
 }
 
-function getNextRoom(current_room, option) {
+function getNextRoom(option) {
     var http = new XMLHttpRequest();
     var url = `/play/${filename}`
     var data = {
         "current_room": current_room,
         "option": option,
-        "inventory": inventory
+        "inventory": inventory,
+        "numbers": numbers
     }
     http.open('POST', url, true);
     http.setRequestHeader( "Content-Type", "application/json" );
@@ -70,7 +62,8 @@ function getNextRoom(current_room, option) {
                 return;
             }
             inventory = returnData.inventory;
-            loadRoom(returnData.info);
+            numbers = returnData.numbers;
+            loadRoom(returnData);
         }
     }
     http.send(JSON.stringify(data));

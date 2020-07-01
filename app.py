@@ -6,6 +6,9 @@ import collections
 from flask import Flask, render_template, jsonify, request
 import markdown
 from werkzeug.exceptions import HTTPException
+from ave import Game, Character
+from ave import AVE, config, load_game_from_file
+from ave.exceptions import AVEGameOver, AVEWinner
 
 app = Flask(__name__)
 
@@ -17,8 +20,40 @@ def get_game_list():
         d = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
     return d
 
-def get_room_info(data):
-    raise NotImplementedError
+def get_room_info(filename, data):
+    numbers = data["numbers"]
+    inventory = data["inventory"]
+    current_room = data["current_room"]
+    option_key = data["option"]
+    character = Character(numbers=numbers, inventory=inventory)
+    game = load_game_from_file(filename)
+    game.load()
+    if option_key is None:
+        game.reset()
+        character.reset(game.items)
+    else:
+        option_key = int(option_key)
+        game.id = current_room
+        game.pick_option(option_key, character)
+    try:
+        text, options = game.get_room_info(character)
+    except AVEGameOver:
+        return {"room": "__GAMEOVER__"}
+    except AVEWinner:
+        return {"room": "__WINNER__"}
+    options_list = []
+    for k, v in options.items():
+        options_list.append((k, v))
+    options_list = sorted(options_list, key=lambda x: x[0])
+    inventory_text = character.get_inventory(game.items)
+    return {
+        "room": game.id,
+        "room_desc": text,
+        "options": options_list,
+        "inventory": character.inventory,
+        "numbers": character.numbers,
+        "inventory_text": inventory_text,
+    }
 
 @app.errorhandler(HTTPException)
 def error(e):
@@ -61,7 +96,8 @@ def play(filename):
         return render_template('play.html', filename=filename)
     elif request.method == 'POST':
         data = request.json
-        room_info = get_room_info(data)
+        print(data)
+        room_info = get_room_info(filename, data)
         return jsonify(room_info)
 
 @app.route('/play')
