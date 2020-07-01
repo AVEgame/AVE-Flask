@@ -1,119 +1,41 @@
 <script type='text/javascript' src={{ url_for('static', filename='/ave/gameselect.js', time=now.timestamp()) }}></script>
 <div class='gameselect' id='maingameselect'>
     <div style='width:100%;text-align:center;margin-bottom:3px'>
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
-        <span style='color:red'>A</span>
-        <span style='color:green'>V</span>
-        <span style='color:blue'>E</span>
-        &nbsp;
+        {% for i in range(21) %}
+            <span style='color:red'>A</span><span style='color:green'>V</span><span style='color:blue'>E</span> 
+        {% endfor %}
     </div>
     <div id='main'></div>
 </div>
-
-<!-- <script type='text/javascript'>
-user = false
-var xobj = new XMLHttpRequest();
-xobj.overrideMimeType('application/json');
-xobj.open('GET', '/gamelist.json?time=1593605009', true); // Replace 'my_data' with the path to your file
-xobj.onreadystatechange = function() {
-    if (xobj.readyState == 4 && xobj.status == '200') {
-        json_data = JSON.parse(xobj.responseText);
-        if (user) {
-            gameList = json_data
-            for (var key in gameList) {
-                if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
-                    gameList[key]['title'] = '&#9733; ' + gameList[key]['title']
+<script type='text/javascript'>
+    {% if user %}
+        user = true;
+    {% else %}
+        user = false;
+    {% endif %}
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType('application/json');
+    xobj.open('GET', '/gamelist.json?time={{ now.timestamp() }}', true);
+    xobj.onreadystatechange = function() {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+            json_data = JSON.parse(xobj.responseText);
+            if (user) {
+                gameList = json_data
+                for (var key in gameList) {
+                    if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
+                        gameList[key]['title'] = '&#9733; ' + gameList[key]['title']
+                    }
+                }
+            } else {
+                gameList = Array()
+                for (var key in json_data) {
+                    if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
+                        gameList[key] = json_data[key]
+                    }
                 }
             }
-        } else {
-            gameList = Array()
-            for (var key in json_data) {
-                if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
-                    gameList[key] = json_data[key]
-                }
-            }
+            showMainTitle()
         }
-        showMainTitle()
-    }
-};
-xobj.send(null);
-</script> -->
+    };
+    xobj.send(null);
+</script>
