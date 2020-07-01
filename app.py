@@ -3,7 +3,7 @@ import re
 import json
 import collections
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import markdown
 from werkzeug.exceptions import HTTPException
 
@@ -16,6 +16,9 @@ def get_game_list():
     with open("gamelist.json", "r") as f:
         d = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
     return d
+
+def get_room_info(data):
+    raise NotImplementedError
 
 @app.errorhandler(HTTPException)
 def error(e):
@@ -52,9 +55,14 @@ def make():
 def git():
     return render_template('git.html')
 
-@app.route('/play/<filename>')
+@app.route('/play/<filename>', methods=['GET', 'POST'])
 def play(filename):
-    return render_template('play.html', filename=filename)
+    if request.method == 'GET':
+        return render_template('play.html', filename=filename)
+    elif request.method == 'POST':
+        data = request.json
+        room_info = get_room_info(data)
+        return jsonify(room_info)
 
 @app.route('/play')
 def select():

@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<script type='text/javascript' src={{ url_for('static', filename='/ave/play.js', time=now.timestamp()) }}></script>
 <div class="game">
     <div style="width:100%;text-align:right;margin-bottom:3px">{% include 'ave.html' %}</div>
     <div id='error'>
@@ -14,4 +15,10 @@
     <div id='inventory'></div>
     <div id='menu'></div>
 </div>
+<script>
+    var filename = "{{ filename }}";
+    var inventory = Array();
+    var current_room = "start";
+    getNextRoom(current_room, null);
+</script>
 {% endblock %}
