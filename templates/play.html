@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="game">
+    <div style="width:100%;text-align:right;margin-bottom:3px">{% include 'ave.html' %}</div>
+    <div id='error'>
+        Game not found<br />If you followed a link to get to this page, please <a href='https://github.com/AVEgame/AVE/issues' target='new'>submit a bug report on GitHub</a>.
+    </div>
+    <div id='gameend'>
+        <div id='gameendtext'>GAME OVER</div>
+        <div class='menuitem' onclick='gameRestart()'>Play again</div>
+        <div class='menuitem' onclick='gameList()'>Play a different game</div>
+    </div>
+    <div id='roominfo'></div>
+    <div id='inventory'></div>
+    <div id='menu'></div>
+</div>
+{% endblock %}

@@ -44,3 +44,11 @@ def make():
 @app.route('/git')
 def git():
     return render_template('git.html')
+
+@app.route('/play/<filename>')
+def play(filename):
+    return render_template('play.html', filename=filename)
+
+@app.route('/play')
+def select():
+    return render_template('select.html')
