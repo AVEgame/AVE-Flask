@@ -2,12 +2,13 @@ from datetime import datetime
 import re
 import json
 import collections
+import os
 
 from flask import Flask, render_template, jsonify, request
 import markdown
 from werkzeug.exceptions import HTTPException
 from ave import Game, Character
-from ave import AVE, config, load_game_from_file
+from ave import config, load_game_from_file
 from ave.exceptions import AVEGameOver, AVEWinner
 
 app = Flask(__name__)
@@ -20,13 +21,16 @@ def get_game_list():
         d = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
     return d
 
-def get_room_info(filename, data):
+def get_room_info(filename, data, user=False):
     numbers = data["numbers"]
     inventory = data["inventory"]
     current_room = data["current_room"]
     option_key = data["option"]
     character = Character(numbers=numbers, inventory=inventory)
-    game = load_game_from_file(filename)
+    if user:
+        raise NotImplementedError
+    else:
+        game = load_game_from_file(os.path.join(config.games_folder, filename))
     game.load()
     if option_key is None:
         game.reset()
