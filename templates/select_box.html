@@ -20,17 +20,20 @@
         if (xobj.readyState == 4 && xobj.status == '200') {
             json_data = JSON.parse(xobj.responseText);
             if (user) {
-                gameList = json_data
-                for (var key in gameList) {
-                    if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
-                        gameList[key]['title'] = '&#9733; ' + gameList[key]['title']
+                gameList = Array();
+                for (var key in json_data) {
+                    if (json_data[key]['active']) {
+                        gameList[key] = json_data[key];
+                        if (key.substring(0, 5) != 'user/') {
+                            gameList[key]['title'] = '&#9733; ' + gameList[key]['title'];
+                        }
                     }
                 }
             } else {
-                gameList = Array()
+                gameList = Array();
                 for (var key in json_data) {
                     if (key.substring(0, 5) != 'user/' && json_data[key]['active']) {
-                        gameList[key] = json_data[key]
+                        gameList[key] = json_data[key];
                     }
                 }
             }
