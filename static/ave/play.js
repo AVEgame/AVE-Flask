@@ -6,8 +6,48 @@ function gameList() {
     window.location.href = "/play";
 }
 
+function poplulateRoomInfo(roomDesc) {
+    var roominfo = document.getElementById('roominfo');
+    roominfo.innerHTML = "";
+    var roomStyle = window.getComputedStyle(roominfo, null);
+    var roomWidth = parseFloat(roomStyle.width);
+    roomDescLineList = roomDesc.split("\n");
+    for (var key in roomDescLineList) {
+        var line = roomDescLineList[key];
+        if (line == "") {
+            roominfo.appendChild(document.createElement('br'));
+        }
+        else {
+            var count = 0;
+            lineWords = line.split(" ");
+            while (count < lineWords.length) {
+                var lineDiv = document.createElement('div');
+                lineDiv.style.display = 'inline-block';
+                roominfo.appendChild(lineDiv);
+                while (lineDiv.offsetWidth < roomWidth && count < lineWords.length) {
+                    lineDiv.innerText += " " + lineWords[count];
+                    count += 1
+                }
+                if (lineDiv.offsetWidth >= roomWidth) {
+                    count -= 1
+                    var lineDivText = lineDiv.innerText.trim()
+                    lineDiv.innerText = lineDivText.substring(0, lineDivText.length - lineWords[count].length).trim()   
+                }
+                roominfo.appendChild(document.createElement('br'));
+            }
+        }
+        var children = roominfo.childNodes;
+        for (var i = 0; i < children.length; i++) {
+            var child = children[i];
+            if (child.tagName == "DIV") {
+                child.classList.add("typewriter");
+            }
+        }
+    }
+}
+
 function loadRoom(info) {
-    document.getElementById('roominfo').innerHTML = info.room_desc;
+    poplulateRoomInfo(info.room_desc);
     var inventory = "INVENTORY";
     info.inventory_text.forEach( item => inventory += `</br>${item}`);
     document.getElementById('inventory').innerHTML = inventory;
