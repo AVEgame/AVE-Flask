@@ -12,3 +12,7 @@ class GitManager:
     def add_file_to_branch(self, branch, filename, content):
         message = "Add game " + filename
         self.repo.create_file(filename, message, content, branch=branch)
+    
+    def create_pull_request(self, branch, filename):
+        message = "Add game " + filename
+        self.repo.create_pull(title=message, body=message, head=branch, base="master")
