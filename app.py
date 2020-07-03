@@ -148,7 +148,7 @@ def add():
             error = "No file uploaded"
             return render_template('add.html', error=error)
         if filename.split(".")[-1] != "ave":
-            error = "File must has .ave as it's extension"
+            error = "File must have .ave as it's extension"
             return render_template('add.html', error=error)
         filename = secure_filename(filename)
         content = file.read()
