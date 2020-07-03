@@ -7,11 +7,17 @@ import os
 from flask import Flask, render_template, jsonify, request
 import markdown
 from werkzeug.exceptions import HTTPException
+from werkzeug.utils import secure_filename
 from ave import Game, Character
 from ave import config, load_game_from_file
 from ave.exceptions import AVEGameOver, AVEWinner
 
+from git_handler import GitManager
+
 app = Flask(__name__)
+
+with open("gitkey", "r") as f:
+    GIT_KEY = f.read().strip()
 
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
@@ -121,3 +127,23 @@ def gamelist():
 def lib():
     d = get_game_list()
     return render_template('library.html', game_list=d)
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'GET':
+        return render_template('add.html')
+    if request.method == 'POST':
+        print(request.files)
+        if 'avefile' not in request.files:
+            return render_template('add.html')
+        file = request.files['avefile']
+        filename = file.filename
+        if not filename:
+            return render_template('add.html')
+        if filename.split(".")[-1] != "ave":
+            return render_template('add.html')
+        filename = secure_filename(filename)
+        content = file.read()
+        git = GitManager(GIT_KEY)
+        link = git.add_file(filename, content)
+        return render_template('success.html', link=link)
