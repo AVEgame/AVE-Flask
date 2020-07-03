@@ -1,4 +1,5 @@
 from github import Github
+from datetime import datetime
 
 class GitManager:
     def __init__(self, access_key):
@@ -15,4 +16,10 @@ class GitManager:
     
     def create_pull_request(self, branch, filename):
         message = "Add game " + filename
-        self.repo.create_pull(title=message, body=message, head=branch, base="master")
+        return self.repo.create_pull(title=message, body=message, head=branch, base="master").html_url
+
+    def add_file(self, filename, content):
+        branch = f"{filename}-{int(datetime.now().timestamp())}"
+        self.create_branch(branch)
+        self.add_file_to_branch(branch, filename, content)
+        return self.create_pull_request(branch, filename)
