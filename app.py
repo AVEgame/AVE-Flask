@@ -69,7 +69,10 @@ def get_room_info(filename, data, user=False):
 
 @app.errorhandler(HTTPException)
 def error(e):
-    return render_template("error.html", code=e.code)
+    message = ""
+    if e.code == 413:
+        message = "File size too large, please try again"
+    return render_template("error.html", code=e.code, message=message)
 
 @app.context_processor
 def inject():
@@ -135,19 +138,23 @@ def add():
     if request.method == 'GET':
         return render_template('add.html')
     if request.method == 'POST':
+        no_file = False
         print(request.files)
         if 'avefile' not in request.files:
-            return render_template('add.html')
+            no_file = True
         file = request.files['avefile']
         filename = file.filename
-        if not filename:
-            return render_template('add.html')
+        if not filename or no_file:
+            error = "No file uploaded"
+            return render_template('add.html', error=error)
         if filename.split(".")[-1] != "ave":
-            return render_template('add.html')
+            error = "File must has .ave as it's extension"
+            return render_template('add.html', error=error)
         filename = secure_filename(filename)
         content = file.read()
         with magic.Magic() as m:
             if 'ASCII Text' not in m.id_buffer(content):
+                error = "File contents not supports. File must contain ASCII text"
                 return render_template('add.html')
         git = GitManager(GIT_KEY)
         link = git.add_file(filename, content)

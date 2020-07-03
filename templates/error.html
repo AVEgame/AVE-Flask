@@ -1,6 +1,10 @@
 {% extends 'layout.html' %}
 {% block content %}
 Error {{ code }}
+{% if message %}
+{{ message }}
+<br/><br/>
+{% endif %}
 <br /><br />
 If you followed a link to get here, please submit a bug report <a href='https://github.com/mscroggs/AVE/issues' target='new'>here</a>.
 <br /><br />

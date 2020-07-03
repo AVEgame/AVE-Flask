@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
+{% if error %}
+{{ error|safe }}
+<br/><br/>
+{% endif %}
 To add a game to the library, please upload it using the form below. Once you have uploaded it, we will review it then make it public.<br /><br />
 <form method='post' action='/add' enctype='multipart/form-data'>
     <input type="file" name="avefile" accept=".ave">
