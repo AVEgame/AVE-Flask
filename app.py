@@ -34,18 +34,17 @@ def get_room_info(filename, data, user=False):
     inventory = data["inventory"]
     current_room = data["current_room"]
     option_key = data["option"]
-    character = Character(numbers=numbers, inventory=inventory)
     if user:
         raise NotImplementedError
     else:
         game = load_game_from_file(os.path.join(config.games_folder, filename))
     game.load()
     if option_key is None:
-        game.reset()
+        character = Character()
         character.reset(game.items)
     else:
         option_key = int(option_key)
-        game.id = current_room
+        character = Character(numbers=numbers, inventory=inventory, location=current_room)
         game.pick_option(option_key, character)
     try:
         text, options = game.get_room_info(character)
@@ -59,7 +58,7 @@ def get_room_info(filename, data, user=False):
     options_list = sorted(options_list, key=lambda x: x[0])
     inventory_text = character.get_inventory(game.items)
     return {
-        "room": game.id,
+        "room": character.location,
         "room_desc": text,
         "options": options_list,
         "inventory": character.inventory,
