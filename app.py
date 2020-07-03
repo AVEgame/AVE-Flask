@@ -40,7 +40,6 @@ def get_room_info(filename, data, user=False):
         game = load_game_from_file(os.path.join(config.games_folder, filename))
     game.load()
     if option_key is None:
-        game.reset()
         character = Character()
         character.reset(game.items)
     else:
