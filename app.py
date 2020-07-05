@@ -165,9 +165,11 @@ def gamelist():
     return jsonify(d)
 
 @app.route('/library')
+@app.route('/library/debug')
 def lib():
+    debug = "debug" in request.path
     d = get_game_list()
-    return render_template('library.html', game_list=d)
+    return render_template('library.html', game_list=d, debug=debug)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():

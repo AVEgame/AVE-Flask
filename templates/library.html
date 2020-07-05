@@ -5,7 +5,7 @@
     To find out more about writing your own game for {% include 'ave.html' %} see the <a href='/write'>make page</a>.
     <br /><br />
     {% for game in game_list %}
-        {% if all or game["active"] %}
+        {% if debug or game["active"] %}
             {% include 'tildas.html' %}
             <br />
             <b>{{ game["title"] }}.</b> by {{ game["author"] }}
