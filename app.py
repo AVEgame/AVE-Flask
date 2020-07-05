@@ -135,6 +135,7 @@ def play(filename):
         except:
             return render_template("play_error.html", data=data), 500
 
+@app.route('/download/<filename>')
 @app.route('/download/user/<filename>')
 def download(filename):
     user = False
