@@ -89,7 +89,7 @@ def error(e):
 def inject():
     return {
         'now': datetime.utcnow(),
-        'version': aveconfig.version,
+        'version': aveconfig.version.strip(),
         }
 
 @app.route('/')
