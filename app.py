@@ -27,11 +27,12 @@ with open("gitkey", "r") as f:
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
 
-
 def get_game_list():
     with open(os.path.join(aveconfig.root_folder, "gamelist.json"), "r") as f:
-        d = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
-    return d
+        games = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
+    for game in games:
+        game["user"] = False
+    return games
 
 def get_room_info(filename, data, user=False):
     numbers = data["numbers"]
