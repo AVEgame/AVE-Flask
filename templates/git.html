@@ -1,8 +1,24 @@
 {% extends 'layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css">
+<link rel="stylesheet" href={{ url_for('static', filename='github-activity/github-activity-0.1.5.min.css') }}>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+<script type="text/javascript" src={{ url_for('static', filename='github-activity/github-activity-0.1.5.min.js') }}></script>
+{% endblock %}
+
 {% block content %}
 The {% include 'ave.html' %} source code is available on <a href='https://github.com/AVEgame/AVE' target='new'>GitHub</a>. Recent commits can be
 seen below.<br /><br />
 The source code for this website and our mobile app can also be found on the <a href='https://github.com/AVEgame' target='new'>AVEgame organisation page on GitHub</a>.
 <br /><br />
-<iframe id="git" allowtransparency="true" frameborder="0" scrolling="no" seamless="seamless" src="http://colmdoyle.github.io/gh-activity/gh-activity.html?user=AVEgame&type=user"></iframe>
+<div id="feed"></div>
+<script>
+GitHubActivity.feed({
+	username: "AVEGame",
+	selector: "#feed",
+	limit: 20 // optional
+});
+</script>
 {% endblock %}

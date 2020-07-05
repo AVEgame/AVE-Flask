@@ -4,6 +4,8 @@
         <link rel='stylesheet' href={{ url_for('static', filename='sty.css') }}>
         <link rel='stylesheet' href={{ url_for('static', filename='ave/sty.css') }}>
         <script type='text/javascript' src={{ url_for('static', filename='konami.js') }}></script>
+        {% block head %}
+        {% endblock %}
     </head>
     <body>
         <div class='top'>
