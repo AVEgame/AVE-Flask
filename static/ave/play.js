@@ -77,14 +77,18 @@ function menuHandler(e) {
 }
 
 function getNextRoom(option) {
-    var http = new XMLHttpRequest();
-    var url = `/play/${filename}`
     var data = {
         "current_room": current_room,
         "option": option,
         "inventory": inventory,
         "numbers": numbers
     }
+    requestRoom(data);
+}
+
+function requestRoom(data) {
+    var http = new XMLHttpRequest();
+    var url = `/play/${filename}`
     http.open('POST', url, true);
     http.setRequestHeader( "Content-Type", "application/json" );
     http.onreadystatechange = function() {//Call a function when the state changes.
@@ -104,6 +108,15 @@ function getNextRoom(option) {
             inventory = returnData.inventory;
             numbers = returnData.numbers;
             loadRoom(returnData);
+        }
+        else if (http.readyState == 4 && http.status != 200) {
+            var gameDiv = document.getElementById('game');
+            var parent = gameDiv.parentNode;
+            parent.removeChild(gameDiv);
+            var errorDiv = document.createElement('div');
+            errorDiv.classList.add("error");
+            errorDiv.innerHTML = http.responseText;
+            parent.appendChild(errorDiv);
         }
     }
     http.send(JSON.stringify(data));

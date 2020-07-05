@@ -121,8 +121,11 @@ def play(filename):
         return render_template('play.html', filename=filename)
     elif request.method == 'POST':
         data = request.json
-        room_info = get_room_info(filename, data)
-        return jsonify(room_info)
+        try:
+            room_info = get_room_info(filename, data)
+            return jsonify(room_info)
+        except:
+            return render_template("play_error.html", data=data), 500
 
 @app.route('/play')
 def select():

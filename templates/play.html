@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <script type='text/javascript' src={{ url_for('static', filename='/ave/play.js', time=now.timestamp()) }}></script>
-<div class="game">
+<div class="game" id="game">
     <div style="width:100%;text-align:right;margin-bottom:3px">{% include 'ave.html' %}</div>
     <div id='error'>
         Game not found<br />If you followed a link to get to this page, please <a href='https://github.com/AVEgame/AVE/issues' target='new'>submit a bug report on GitHub</a>.
