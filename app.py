@@ -168,5 +168,12 @@ def add():
                 error = "File contents not supported. File must contain ASCII text"
                 return render_template('add.html', error=error)
         git = GitManager(GIT_KEY)
-        link = git.add_file(filename, content)
+        try:
+            link = git.add_file(filename, content)
+        except:
+            error = """
+            There was an error communicating with the GitHub API.
+            Please try again later.
+            """
+            return render_template('add.html', error=error)
         return render_template('success.html', link=link)
