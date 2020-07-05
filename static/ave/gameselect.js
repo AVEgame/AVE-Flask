@@ -18,7 +18,7 @@ function showMainTitle(){
         for(var game in gameList){
             if(gameList[game]["n"]==nums[i]){
                 count++
-                out += "<div class='menuitem' onclick=\"showGameTitle('"+gameList[game]["filename"]+"')\">"+gameList[game]["title"]+"</div>"
+                out += "<div class='menuitem' onclick=\"showGameTitle('"+game+"')\">"+gameList[game]["title"]+"</div>"
             }
         }
     }
@@ -53,7 +53,7 @@ function showGameTitle(id){
     out += seperator()
     }
     out += "<div id='menu'>"
-    out += "<div class='menuitem' onclick='loadGame(\""+id+"\")'>Play game</div>"
+    out += "<div class='menuitem' onclick='loadGame(\""+gameList[id]["filename"]+"\")'>Play game</div>"
     out += "<div class='menuitem' onclick='showMainTitle()'>Back to main menu</div>"
     out += "</div>"
     document.getElementById("main").innerHTML = out
