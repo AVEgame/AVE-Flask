@@ -98,7 +98,7 @@ def index():
 
 @app.route('/docs/<filename>')
 def docs(filename):
-    with open(f"AVE-docs/docs/{filename}", "r") as f:
+    with open(f"AVE-docs/{filename}", "r") as f:
         text = f.read()
     html = markdown.markdown(text, extensions=['tables', 'fenced_code']).replace(" AVE ", f" {AVE_SPANS} ")
     html = re.sub(r"\%\%([^\%]*)\%\%", r'<span style="color:#4d9906"><<i>\1</i>></span>', html)
