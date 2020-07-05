@@ -8,8 +8,8 @@ from flask import Flask, render_template, jsonify, request
 import markdown
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
-from ave import Game, Character
-from ave import config, load_game_from_file
+from ave import Game, Character, load_game_from_file
+from ave import config as aveconfig
 from ave.exceptions import AVEGameOver, AVEWinner
 import magic
 
@@ -18,14 +18,18 @@ from git_handler import GitManager
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 
+with open("config.json", "r") as f:
+    CONFIG = json.load(f)
+
 with open("gitkey", "r") as f:
     GIT_KEY = f.read().strip()
 
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
 
+
 def get_game_list():
-    with open("gamelist.json", "r") as f:
+    with open(os.path.join(aveconfig.root_folder, "gamelist.json"), "r") as f:
         d = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
     return d
 
@@ -37,8 +41,9 @@ def get_room_info(filename, data, user=False):
     if user:
         raise NotImplementedError
     else:
-        game = load_game_from_file(os.path.join(config.games_folder, filename))
+        game = load_game_from_file(os.path.join(aveconfig.games_folder, filename))
     game.load()
+    print(option_key)
     if option_key is None:
         character = Character()
         character.reset(game.items)
