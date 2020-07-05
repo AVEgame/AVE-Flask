@@ -1,0 +1,18 @@
+[Unit]
+Description = AVEFlask Gunicorn Service
+After = network.target
+
+[Service]
+PermissionsStartOnly = true
+PIDFile = /run/aveflask/aveflask.pid
+User = <somuser>
+Group = <someuser>
+WorkingDirectory = <Full path to AVE-Flask directory>
+RuntimeDirectory = aveflask
+ExecStart = <Full path to gunicorn executable> app:app -b 0.0.0.0:8000 -w 8 --pid /run/aveflask/aveflask.pid
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
