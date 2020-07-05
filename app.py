@@ -4,7 +4,7 @@ import json
 import collections
 import os
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 import markdown
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
@@ -126,6 +126,13 @@ def play(filename):
             return jsonify(room_info)
         except:
             return render_template("play_error.html", data=data), 500
+
+@app.route('/download/<filename>')
+def download(filename):
+    with open(os.path.join(aveconfig.games_folder, filename), "r") as f:
+        response =  make_response(f.read(), 200)
+        response.mimetype = "text/plain"
+        return response
 
 @app.route('/play')
 def select():
