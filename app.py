@@ -165,8 +165,8 @@ def add():
         content = file.read()
         with magic.Magic() as m:
             if 'ASCII Text' not in m.id_buffer(content):
-                error = "File contents not supports. File must contain ASCII text"
-                return render_template('add.html')
+                error = "File contents not supported. File must contain ASCII text"
+                return render_template('add.html', error=error)
         git = GitManager(GIT_KEY)
         link = git.add_file(filename, content)
         return render_template('success.html', link=link)
