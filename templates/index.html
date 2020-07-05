@@ -8,21 +8,20 @@ Before reading any more, you should have a go at playing {% include 'ave.html' %
 <br /><br />
 {% include 'select_box.html' %}
 <h2>About AVE</h2>
+{% include 'ave.html' %} is a text-based adventure game engine. It is written using Python.
+<br /><br />
+You can make your own games for {% include 'ave.html' %} using the <a href='/docs/guide.md'>{% include 'ave.html' %} language.</a>
+Once you have written a game, you can <a href='/add'>upload</a> it to the <a href='/library'>game library</a> for anyone to play.
+<br /><br />
+You can play {% include 'ave.html' %} games on this website, or <a href='/docs/versions.md'>download {% include 'ave.html' %}</a> to play in terminal on Linux or MacOS, or in commmand prompt on Windows.
 <div class='imgr'>
 <img src={{ url_for('static', filename='/img/badge.jpg') }}><br />
 {% include 'ave.html' %} running on the EMF <a href='https://badge.emfcamp.org/wiki/TiLDA_MK3' target='new'>TiLDA Mk&pi;</a> badge.
 </div>
-{% include 'ave.html' %} began life as a <a href='/docs/python.md'>Python game</a>. At <a href='https://emfcamp.org' target='new'>Electromagnetic Field 2016 (EMF)</a>
+At <a href='https://emfcamp.org' target='new'>Electromagnetic Field 2016 (EMF)</a>
 we made a version of {% include 'ave.html' %} that runs on the <a href='/docs/badge.md'>TiLDA Mk&pi; badge</a>
-that was given to every attendee. Shortly after EMF, we began work on a javascript version of {% include 'ave.html' %}, this website and 
-Android and iOS apps (coming soon).
+that was given to every attendee.
 <br /><br />
-If you want to play AVE on a non-Linux/Mac computer, you can download our <a href='/docs/virtualbox.md'>VirtualBox image</a>.
-<h2>Making Your Own Games</h2>
-If you would like to write your own games for {% include 'ave.html' %}, have a look at
-<a href='/make'>these instructions</a>. Once you have written a game, you can submit it to the game library <a href='/add'>here</a>.
-You can view all user submitted games <a href='/library'>in the library</a>. Once a game has been included in the game library, it will become
-playable on any version of {% include 'ave.html' %} (as long as the player is connected to the internet).
 <h2>Contributing to AVE</h2>
 If you want to edit the source code of AVE, it is available on <a href='/git'>GitHub</a>.
 {% endblock %}
