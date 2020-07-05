@@ -3,6 +3,8 @@
         <title>AVE: Adventure! Villainy! Excitement!</title>
         <link rel='stylesheet' href={{ url_for('static', filename='sty.css') }}>
         <link rel='stylesheet' href={{ url_for('static', filename='ave/sty.css') }}>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <script type='text/javascript' src={{ url_for('static', filename='konami.js') }}></script>
         {% block head %}
         {% endblock %}
     </head>
@@ -15,16 +17,19 @@
             {% with title=True %}
                 <a href='/'>home</a>
                 <a href='/play'>play</a>
-                <a href='/make'>write</a>
-                <a href='/add'>upload</a>
-                <a href='/library'>library</a>
                 {% with til = 0 %}
+                    {% include 'tildas.html' %}
+                {% endwith %}
+                <a href='/library'>library</a>
+                <a href='/make'>write</a>
+                <a href="/add">upload</a>
+                {% with til = 1 %}
                     {% include 'tildas.html' %}
                 {% endwith %}
                 <a href='/docs/versions.md'>download</a>
                 <a href='/docs/index.md'>docs</a>
                 <a href='/git'>GitHub</a>
-                {% with til = 1 %}
+                {% with til = 2 %}
                     {% include 'tildas.html' %}
                 {% endwith %}
                 <a href='/team'>team</a>

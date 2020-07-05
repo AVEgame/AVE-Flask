@@ -98,7 +98,7 @@ def index():
 
 @app.route('/docs/<filename>')
 def docs(filename):
-    with open(f"AVE-docs/docs/{filename}", "r") as f:
+    with open(f"AVE-docs/{filename}", "r") as f:
         text = f.read()
     html = markdown.markdown(text, extensions=['tables', 'fenced_code']).replace(" AVE ", f" {AVE_SPANS} ")
     html = re.sub(r"\%\%([^\%]*)\%\%", r'<span style="color:#4d9906"><<i>\1</i>></span>', html)
@@ -135,6 +135,7 @@ def play(filename):
         except:
             return render_template("play_error.html", data=data), 500
 
+@app.route('/download/<filename>')
 @app.route('/download/user/<filename>')
 def download(filename):
     user = False

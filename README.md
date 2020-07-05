@@ -5,7 +5,7 @@ A flask based website for AVE, designed to replace the js version.
 To deploy this website, clone the repo with
 
 ```
-git clone --recurse submodules https://github.com/AVEgame/AVE-Flask
+git clone --recurse-submodules https://github.com/AVEgame/AVE-Flask
 ```
 
 Install requirements with
