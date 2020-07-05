@@ -21,8 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
-with open("gitkey", "r") as f:
-    GIT_KEY = f.read().strip()
+GIT_KEY = CONFIG["git_key"]
 
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
@@ -32,6 +31,13 @@ def get_game_list():
         games = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
     for game in games:
         game["user"] = False
+    if "user_games_dir" in CONFIG:
+        user_dir = CONFIG["user_games_dir"]
+        with open(os.path.join(user_dir, "gamelist.json"), "r") as f:
+            user_games = json.load(f)
+            for game in user_games:
+                game["user"] = True
+            games += user_games
     return games
 
 def get_room_info(filename, data, user=False):
