@@ -50,7 +50,6 @@ def get_room_info(filename, data, user=False):
     else:
         game = load_game_from_file(os.path.join(aveconfig.games_folder, filename))
     game.load()
-    print(option_key)
     if option_key is None:
         character = Character()
         character.reset(game.items)
@@ -122,7 +121,6 @@ def play(filename):
         return render_template('play.html', filename=filename)
     elif request.method == 'POST':
         data = request.json
-        print(data)
         room_info = get_room_info(filename, data)
         return jsonify(room_info)
 
@@ -150,7 +148,6 @@ def add():
         return render_template('add.html')
     if request.method == 'POST':
         no_file = False
-        print(request.files)
         if 'avefile' not in request.files:
             no_file = True
         file = request.files['avefile']
