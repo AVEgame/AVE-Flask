@@ -2,3 +2,4 @@ flask
 filemagic
 Markdown
 PyGitHub
+avegame
