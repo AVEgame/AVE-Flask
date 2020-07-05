@@ -46,9 +46,10 @@ def get_room_info(filename, data, user=False):
     current_room = data["current_room"]
     option_key = data["option"]
     if user:
-        raise NotImplementedError
+        path = os.path.join(CONFIG["user_games_dir"], filename)
     else:
-        game = load_game_from_file(os.path.join(aveconfig.games_folder, filename))
+        path = os.path.join(aveconfig.games_folder, filename)
+    game = load_game_from_file(path)
     game.load()
     if option_key is None:
         character = Character()
@@ -116,20 +117,35 @@ def git():
     return render_template('git.html')
 
 @app.route('/play/<filename>', methods=['GET', 'POST'])
+@app.route('/play/user/<filename>', methods=['GET', 'POST'])
 def play(filename):
+    user = False
+    request_path = request.path.split("/")
+    if len(request_path) == 4 and request_path[2] == "user":
+        user = True
     if request.method == 'GET':
+        if user:
+            filename = 'user/' + filename
         return render_template('play.html', filename=filename)
     elif request.method == 'POST':
         data = request.json
         try:
-            room_info = get_room_info(filename, data)
+            room_info = get_room_info(filename, data, user=user)
             return jsonify(room_info)
         except:
             return render_template("play_error.html", data=data), 500
 
-@app.route('/download/<filename>')
+@app.route('/download/user/<filename>')
 def download(filename):
-    with open(os.path.join(aveconfig.games_folder, filename), "r") as f:
+    user = False
+    request_path = request.path.split("/")
+    if len(request_path) == 4 and request_path[2] == "user":
+        user = True
+    if user:
+        path = os.path.join(CONFIG['user_games_dir'], filename)
+    else:
+        path = os.path.join(aveconfig.games_folder, filename)
+    with open(path, "r") as f:
         response =  make_response(f.read(), 200)
         response.mimetype = "text/plain"
         return response
