@@ -21,6 +21,7 @@ function poplulateRoomInfo(roomDesc) {
             var count = 0;
             lineWords = line.split(" ");
             while (count < lineWords.length) {
+                var numWords = 0;
                 var lineDiv = document.createElement('div');
                 lineDiv.style.display = 'inline-block';
                 lineDiv.style.whiteSpace = 'nowrap';
@@ -28,14 +29,12 @@ function poplulateRoomInfo(roomDesc) {
                 while (lineDiv.offsetWidth < roomWidth && count < lineWords.length) {
                     lineDiv.innerText += " " + lineWords[count];
                     count += 1
-                    alert(lineDiv.offsetWidth);
-                    alert(roomWidth);
+                    numWords += 1
                 }
-                alert(lineDiv.offsetWidth)
-                if (lineDiv.offsetWidth >= roomWidth) {
+                if (lineDiv.offsetWidth >= roomWidth && numWords > 1) {
                     count -= 1
                     var lineDivText = lineDiv.innerText.trim()
-                    lineDiv.innerText = lineDivText.substring(0, lineDivText.length - lineWords[count].length).trim()   
+                    lineDiv.innerText = lineDivText.substring(0, lineDivText.length - lineWords[count].length).trim()
                 }
                 roominfo.appendChild(document.createElement('br'));
             }
