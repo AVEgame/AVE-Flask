@@ -69,7 +69,7 @@ def get_room_info(filename, data, user=False):
         options_list.append((k, v))
     options_list = sorted(options_list, key=lambda x: x[0])
     inventory_text = character.get_inventory(game.items)
-    return {
+    data = {
         "room": character.location,
         "room_desc": text,
         "options": options_list,
@@ -77,6 +77,7 @@ def get_room_info(filename, data, user=False):
         "numbers": character.numbers,
         "inventory_text": inventory_text,
     }
+    return data
 
 @app.errorhandler(HTTPException)
 def error(e):
