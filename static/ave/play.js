@@ -23,11 +23,15 @@ function poplulateRoomInfo(roomDesc) {
             while (count < lineWords.length) {
                 var lineDiv = document.createElement('div');
                 lineDiv.style.display = 'inline-block';
+                lineDiv.style.whiteSpace = 'nowrap';
                 roominfo.appendChild(lineDiv);
                 while (lineDiv.offsetWidth < roomWidth && count < lineWords.length) {
                     lineDiv.innerText += " " + lineWords[count];
                     count += 1
+                    alert(lineDiv.offsetWidth);
+                    alert(roomWidth);
                 }
+                alert(lineDiv.offsetWidth)
                 if (lineDiv.offsetWidth >= roomWidth) {
                     count -= 1
                     var lineDivText = lineDiv.innerText.trim()
