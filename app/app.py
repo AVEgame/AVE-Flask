@@ -15,9 +15,6 @@ import magic
 
 from git_handler import GitManager
 
-app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
-
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
@@ -25,6 +22,16 @@ GIT_KEY = CONFIG["git_key"]
 
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
+
+class ReverseProxied(object):
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        scheme = environ.get('X-Forwarded-Proto')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        return self.app(environ, start_response)
 
 def get_game_list():
     with open(os.path.join(aveconfig.root_folder, "gamelist.json"), "r") as f:
@@ -203,3 +210,7 @@ def add():
             """
             return render_template('add.html', error=error)
         return render_template('success.html', link=link)
+
+app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.wsgi_app = ReverseProxied(app.wsgi_app)
