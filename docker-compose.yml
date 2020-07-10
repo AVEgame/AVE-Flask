@@ -10,7 +10,5 @@ services:
       - /home/ubuntu/caddy/data:/data
   aveflask:
     image: local/aveflask
-    ports:
-      - 8000:8000
     volumes:
       - /home/ubuntu/AVE-usergames:/AVE-usergames
