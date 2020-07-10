@@ -15,6 +15,9 @@ import magic
 
 from git_handler import GitManager
 
+app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
@@ -211,6 +214,4 @@ def add():
             return render_template('add.html', error=error)
         return render_template('success.html', link=link)
 
-app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.wsgi_app = ReverseProxied(app.wsgi_app)
