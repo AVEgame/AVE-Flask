@@ -8,7 +8,9 @@ services:
     volumes:
       - /home/ubuntu/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/ubuntu/caddy/data:/data
+    restart: always
   aveflask:
     image: local/aveflask
     volumes:
       - /home/ubuntu/AVE-usergames:/AVE-usergames
+    restart: always
