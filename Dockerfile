@@ -6,3 +6,5 @@ WORKDIR /app
 RUN pip install gunicorn
 
 RUN pip install -r requirements.txt
+
+CMD ["/usr/local/bin/gunicorn", "app:app", "-b", "0.0.0.0:8000","-w", "8"]
