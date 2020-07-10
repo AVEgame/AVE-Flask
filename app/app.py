@@ -190,10 +190,9 @@ def add():
             return render_template('add.html', error=error)
         filename = secure_filename(filename)
         content = file.read()
-        with magic.Magic() as m:
-            if 'ascii text' not in m.id_buffer(content).lower():
-                error = "File contents not supported. File must contain ASCII text"
-                return render_template('add.html', error=error)
+        if 'ascii text' not in magic.from_buffer(content).lower():
+            error = "File contents not supported. File must contain ASCII text"
+            return render_template('add.html', error=error)
         git = GitManager(GIT_KEY)
         try:
             link = git.add_file(filename, content)
