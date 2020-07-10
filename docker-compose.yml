@@ -12,5 +12,5 @@ services:
   aveflask:
     image: local/aveflask
     volumes:
-      - /home/ubuntu/AVE-usergames:/AVE-usergames
+      - /home/ubuntu/AVE-usergames:/home/ubuntu/AVE-usergames
     restart: always
