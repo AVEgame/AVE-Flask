@@ -15,18 +15,20 @@ import magic
 
 from git_handler import GitManager
 
+
 class ReverseProxied(object):
     def __init__(self, app):
         self.app = app
 
     def __call__(self, environ, start_response):
-        scheme = environ.get('HTTP_X_FORWARDED_PROTO')
+        scheme = environ.get("HTTP_X_FORWARDED_PROTO")
         if scheme:
-            environ['wsgi.url_scheme'] = scheme
+            environ["wsgi.url_scheme"] = scheme
         return self.app(environ, start_response)
 
+
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 with open("config.json", "r") as f:
@@ -37,9 +39,12 @@ GIT_KEY = CONFIG["git_key"]
 with open("templates/ave.html", "r") as f:
     AVE_SPANS = f.read()
 
+
 def get_game_list():
     with open(os.path.join(aveconfig.root_folder, "gamelist.json"), "r") as f:
-        games = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(f.read())
+        games = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(
+            f.read()
+        )
     for game in games:
         game["user"] = False
     if "user_games_dir" in CONFIG:
@@ -50,6 +55,7 @@ def get_game_list():
                 game["user"] = True
             games += user_games
     return games
+
 
 def get_room_info(filename, data, user=False):
     numbers = data["numbers"]
@@ -67,7 +73,9 @@ def get_room_info(filename, data, user=False):
         character.reset(game.items)
     else:
         option_key = int(option_key)
-        character = Character(numbers=numbers, inventory=inventory, location=current_room)
+        character = Character(
+            numbers=numbers, inventory=inventory, location=current_room
+        )
         game.pick_option(option_key, character)
     try:
         text, options = game.get_room_info(character)
@@ -90,6 +98,7 @@ def get_room_info(filename, data, user=False):
     }
     return data
 
+
 @app.errorhandler(HTTPException)
 def error(e):
     message = ""
@@ -97,49 +106,60 @@ def error(e):
         message = "File size too large, please try again"
     return render_template("error.html", code=e.code, message=message)
 
+
 @app.context_processor
 def inject():
     return {
-        'now': datetime.utcnow(),
-        'version': aveconfig.version.strip(),
-        }
+        "now": datetime.utcnow(),
+        "version": aveconfig.version.strip(),
+    }
 
-@app.route('/')
+
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route('/docs/<filename>')
+
+@app.route("/docs/<filename>")
 def docs(filename):
     with open(f"AVE-docs/{filename}", "r") as f:
         text = f.read()
-    html = markdown.markdown(text, extensions=['tables', 'fenced_code']).replace(" AVE ", f" {AVE_SPANS} ")
-    html = re.sub(r"\%\%([^\%]*)\%\%", r'<span style="color:#4d9906"><<i>\1</i>></span>', html)
+    html = markdown.markdown(text, extensions=["tables", "fenced_code"]).replace(
+        " AVE ", f" {AVE_SPANS} "
+    )
+    html = re.sub(
+        r"\%\%([^\%]*)\%\%", r'<span style="color:#4d9906"><<i>\1</i>></span>', html
+    )
     return render_template("docs.html", content=html)
 
-@app.route('/team')
+
+@app.route("/team")
 def team():
-    return render_template('team.html')
+    return render_template("team.html")
 
-@app.route('/make')
+
+@app.route("/make")
 def make():
-    return render_template('make.html')
+    return render_template("make.html")
 
-@app.route('/git')
+
+@app.route("/git")
 def git():
-    return render_template('git.html')
+    return render_template("git.html")
 
-@app.route('/play/<filename>', methods=['GET', 'POST'])
-@app.route('/play/user/<filename>', methods=['GET', 'POST'])
+
+@app.route("/play/<filename>", methods=["GET", "POST"])
+@app.route("/play/user/<filename>", methods=["GET", "POST"])
 def play(filename):
     user = False
     request_path = request.path.split("/")
     if len(request_path) == 4 and request_path[2] == "user":
         user = True
-    if request.method == 'GET':
+    if request.method == "GET":
         if user:
-            filename = 'user/' + filename
-        return render_template('play.html', filename=filename)
-    elif request.method == 'POST':
+            filename = "user/" + filename
+        return render_template("play.html", filename=filename)
+    elif request.method == "POST":
         data = request.json
         try:
             room_info = get_room_info(filename, data, user=user)
@@ -147,63 +167,69 @@ def play(filename):
         except:
             return render_template("play_error.html", data=data), 500
 
-@app.route('/download/<filename>')
-@app.route('/download/user/<filename>')
+
+@app.route("/download/<filename>")
+@app.route("/download/user/<filename>")
 def download(filename):
     user = False
     request_path = request.path.split("/")
     if len(request_path) == 4 and request_path[2] == "user":
         user = True
     if user:
-        path = os.path.join(CONFIG['user_games_dir'], filename)
+        path = os.path.join(CONFIG["user_games_dir"], filename)
     else:
         path = os.path.join(aveconfig.games_folder, filename)
     with open(path, "r") as f:
-        response =  make_response(f.read(), 200)
+        response = make_response(f.read(), 200)
         response.mimetype = "text/plain"
         return response
 
-@app.route('/play')
+
+@app.route("/play")
 def select():
-    return render_template('select.html', user=False)
+    return render_template("select.html", user=False)
 
-@app.route('/play/user')
+
+@app.route("/play/user")
 def user_play():
-    return render_template('select.html', user=True)
+    return render_template("select.html", user=True)
 
-@app.route('/gamelist.json')
+
+@app.route("/gamelist.json")
 def gamelist():
     d = get_game_list()
     return jsonify(d)
 
-@app.route('/library')
-@app.route('/library/debug')
+
+@app.route("/library")
+@app.route("/library/debug")
 def lib():
     debug = "debug" in request.path
     d = get_game_list()
-    return render_template('library.html', game_list=d, debug=debug)
+    return render_template("library.html", game_list=d, debug=debug)
 
-@app.route('/add', methods=['GET', 'POST'])
+
+@app.route("/add", methods=["GET", "POST"])
 def add():
-    if request.method == 'GET':
-        return render_template('add.html')
-    if request.method == 'POST':
+    if request.method == "GET":
+        return render_template("add.html")
+    if request.method == "POST":
         no_file = False
-        if 'avefile' not in request.files:
+        if "avefile" not in request.files:
             no_file = True
-        file = request.files['avefile']
+        file = request.files["avefile"]
         filename = file.filename
         if not filename or no_file:
             error = "No file uploaded"
-            return render_template('add.html', error=error)
+            return render_template("add.html", error=error)
         if filename.split(".")[-1] != "ave":
             error = "File must have .ave as it's extension"
-            return render_template('add.html', error=error)
+            return render_template("add.html", error=error)
         filename = secure_filename(filename)
         content = file.read()
-        if 'ascii text' not in magic.from_buffer(content).lower():
+        if "ascii text" not in magic.from_buffer(content).lower():
             error = "File contents not supported. File must contain ASCII text"
-            return render_template('add.html', error=error)
+            return render_template("add.html", error=error)
         git = GitManager(GIT_KEY)
         try:
             link = git.add_file(filename, content)
@@ -212,5 +238,5 @@ def add():
             There was an error communicating with the GitHub API.
             Please try again later.
             """
-            return render_template('add.html', error=error)
-        return render_template('success.html', link=link)
+            return render_template("add.html", error=error)
+        return render_template("success.html", link=link)
