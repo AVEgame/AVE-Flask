@@ -78,7 +78,7 @@ def get_room_info(filename, data, user=False):
         )
         game.pick_option(option_key, character)
     try:
-        text, options = game.get_room_info(character)
+        text, options = game.get_room_info(character, game.currency)
     except AVEGameOver:
         return {"room": "__GAMEOVER__"}
     except AVEWinner:
@@ -87,7 +87,7 @@ def get_room_info(filename, data, user=False):
     for k, v in options.items():
         options_list.append((k, v))
     options_list = sorted(options_list, key=lambda x: x[0])
-    inventory_text = character.get_inventory(game.items)
+    inventory_text = character.get_inventory(game.items, game.currency)
     data = {
         "room": character.location,
         "room_desc": text,
