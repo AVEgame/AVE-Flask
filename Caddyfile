@@ -9,9 +9,9 @@
 # domain name.
 
 avegame.co.uk {
-    reverse_proxy aveflask_aveflask_1:8000
+    reverse_proxy localhost:8000
 }
 
 www.avegame.co.uk {
-    reverse_proxy aveflask_aveflask_1:8000
+    reverse_proxy localhost:8000
 }
