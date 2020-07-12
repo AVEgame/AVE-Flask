@@ -1,3 +1,3 @@
-[submodule "AVE-docs"]
+[submodule "app/AVE-docs"]
 	path = app/AVE-docs
 	url = https://github.com/AVEgame/AVE-docs
