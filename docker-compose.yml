@@ -6,11 +6,12 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /home/ubuntu/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /home/ubuntu/caddy/data:/data
+      - <path/to/Caddyfile>:/etc/caddy/Caddyfile
+      - <path/to/caddy/data/dir>:/data
     restart: always
   aveflask:
-    image: local/aveflask
+    image: avegame/aveflask:0.1.3-ave-1.9.7
     volumes:
-      - /home/ubuntu/AVE-usergames:/home/ubuntu/AVE-usergames
+      - <path/to/usergames/dir>:/home/ubuntu/AVE-usergames
+      - <path/to/config.json>:/home/ubuntu/app/config.json
     restart: always
